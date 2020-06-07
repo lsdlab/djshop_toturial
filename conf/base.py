@@ -19,6 +19,24 @@ INSTALLED_APPS = [
     'corsheaders',
     'apps.celeryconfig.celery.CeleryConfig',
     'apps.core',
+    'apps.users',
+    'apps.profiles',
+    'apps.growth',
+    'apps.analysis',
+    'apps.merchant',
+    'apps.products',
+    'apps.topics',
+    'apps.transactions',
+    'apps.promotions',
+    'apps.coupons',
+    'apps.inventory',
+    'apps.assist',
+    'apps.stores',
+    'apps.feedback',
+    'apps.history',
+    'apps.payment',
+    'apps.express',
+    'apps.activitystream',
 ]
 
 SITE_ID = 1
@@ -39,7 +57,7 @@ ROOT_URLCONF = 'djshop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'apps', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,7 +105,7 @@ USE_L10N = True
 
 USE_TZ = False
 
-# AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.User'
 
 # static url and media url
 STATIC_URL = '/static/'

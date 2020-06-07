@@ -223,12 +223,14 @@ class ProductsViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
                                                    data=request.data,
                                                    partial=True)
         if patch_serializer.is_valid(raise_exception=True):
+
             # parse html desc
             soup = BeautifulSoup(request.data.get('desc'), features="html5lib")
             tag = soup.find_all("img")
             for i in range(len(tag)):
                 tag[i]['style'] = "max-width: 100%; height: auto;"
             new_desc = soup.prettify().replace('\n', '')
+
             patch_serializer.save(desc=new_desc)
             product.refresh_from_db()
             serializer = ProductSerializer(product, many=False)
