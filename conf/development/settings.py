@@ -48,14 +48,14 @@ SHELL_PLUS = 'ipython'
 
 # celery settings
 BROKER_URL = 'amqp://djshop:Ae2V6v7FzrR9UWyANQJR@localhost:5672/%2F'
-# BROKER_URL = 'redis://root:50f84daf3a6dfd6a9f20@localhost:6379/1'
-CELERY_RESULT_BACKEND = 'redis://root:Ae2V6v7FzrR9UWyANQJR@localhost:6379/2'
+# BROKER_URL = 'redis://root:@localhost:6379/1'
+CELERY_RESULT_BACKEND = 'redis://root:@localhost:6379/2'
 
 # django-redis settings
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": 'redis://root:Ae2V6v7FzrR9UWyANQJR@localhost:6379/3',
+        "LOCATION": 'redis://root:@localhost:6379/3',
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }

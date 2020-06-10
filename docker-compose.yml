@@ -1,0 +1,119 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:12.2
+    container_name: djshop-postgres
+    restart: on-failure
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 1500M
+    environment:
+      POSTGRES_USER: djshop_production
+      POSTGRES_PASSWORD: Ae2V6v7FzrR9UWyANQJR
+      POSTGRES_DB: djshop_production
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./compose/postgres_data:/var/lib/postgresql/data
+      - ./compose/postgres_data/postgresql.conf:/usr/local/etc/postgresql/12/postgresql.conf
+      - ./compose/postgres_data/pg_hba.conf:/usr/local/etc/postgresql/12/pg_hba.conf
+
+  redis:
+    image: redis:5.0.8
+    container_name: djshop-redis
+    restart: on-failure
+    deploy:
+      resources:
+        limits:
+          cpus: '0.20'
+          memory: 500M
+    ports:
+     - '6379:6379'
+    volumes:
+      - ./compose/redis_data:/data
+    depends_on:
+      - "postgres"
+
+  rabbitmq:
+    image: rabbitmq:3.8.3
+    container_name: djshop-rabbitmq
+    restart: on-failure
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 1500M
+    environment:
+      RABBITMQ_DEFAULT_VHOST: '/'
+      RABBITMQ_DEFAULT_USER: djshop
+      RABBITMQ_DEFAULT_PASS: Ae2V6v7FzrR9UWyANQJR
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+      - '15674:15674'
+    volumes:
+      - ./compose/rabbitmq_data:/var/lib/rabbitmq
+      - ./compose/rabbitmq_plugins:/etc/rabbitmq/enabled_plugins
+    depends_on:
+      - "redis"
+
+  nginx:
+    image: nginx:1.17.9
+    container_name: djshop-nginx
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./compose/static:/djshop/apps/static
+      - ./compose/nginx_conf:/etc/nginx/conf.d
+      - ./compose/nginx_logs:/var/log/nginx
+    depends_on:
+      - "web"
+
+  web:
+    build: .
+    image: django-docker-web
+    container_name: djshop-web
+    command: sh -c "wait-for postgres:5432 && python manage.py collectstatic --no-input && python manage.py migrate && gunicorn --workers 3 --threads=4 --bind 0.0.0.0:8080 djshop.wsgi:application"
+    environment:
+      DJANGO_SETTINGS_MODULE: conf.production.settings
+      TZ: Asia/Shanghai
+    volumes:
+      - ./compose/static:/djshop/static
+    depends_on:
+      - "postgres"
+    expose:
+      - "8080"
+
+  celery_worker:
+    image: django-docker-web
+    container_name: djshop-celery_worker
+    command: sh -c "wait-for redis:6379 && celery -A apps.celeryconfig worker -l info --autoscale=4,2"
+    restart: on-failure
+    environment:
+      DJANGO_SETTINGS_MODULE: conf.production.settings
+      TZ: Asia/Shanghai
+    depends_on:
+      - "postgres"
+      - "redis"
+      - "rabbitmq"
+      - "web"
+      - "nginx"
+
+  celery_beat:
+    image: django-docker-web
+    container_name: djshop-celery_beat
+    command: sh -c "wait-for rabbitmq:5672 && celery -A apps.celeryconfig beat -l info"
+    restart: on-failure
+    environment:
+      DJANGO_SETTINGS_MODULE: conf.production.settings
+      TZ: Asia/Shanghai
+    depends_on:
+      - "postgres"
+      - "redis"
+      - "rabbitmq"
+      - "web"
+      - "nginx"
+      - "celery_worker"

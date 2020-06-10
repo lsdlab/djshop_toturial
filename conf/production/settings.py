@@ -12,11 +12,11 @@ DEBUG = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': '',
+        'HOST': 'postgres',
         'PORT': 5432,
         'NAME': 'djshop_production',
-        'USER': 'djseriers',
-        'PASSWORD': ''
+        'USER': 'djshop_production',
+        'PASSWORD': 'Ae2V6v7FzrR9UWyANQJR'
     }
 }
 
@@ -36,15 +36,15 @@ REST_FRAMEWORK = {
 }
 
 # celery settings
-BROKER_URL = 'amqp://djshop:@localhost:5672/%2F'
-# BROKER_URL = 'redis://root:@localhost:6379/1'
-CELERY_RESULT_BACKEND = 'redis://root:@localhost:6379/2'
+BROKER_URL = 'amqp://djshop:Ae2V6v7FzrR9UWyANQJR@rabbitmq:5672/%2F'
+# BROKER_URL = 'redis://root:@redis:6379/1'
+CELERY_RESULT_BACKEND = 'redis://root:@redis:6379/2'
 
 # django-redis settings
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": 'redis://root:@localhost:6379/3',
+        "LOCATION": 'redis://root:@redis:6379/3',
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }

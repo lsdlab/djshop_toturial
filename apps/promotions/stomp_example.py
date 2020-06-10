@@ -2,7 +2,7 @@ import pika
 
 mq_creds = pika.PlainCredentials(
     username="djshop",
-    password="GkTM2HxZN27pws8t")
+    password="Ae2V6v7FzrR9UWyANQJR")
 
 mq_params = pika.ConnectionParameters(
     host="localhost",
