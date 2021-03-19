@@ -3,7 +3,7 @@ psycopg2-binary==2.8.4
 django-redis==4.11.0
 
 # Restful API
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 djangorestframework-jwt==1.11.0
 django-cors-headers==3.2.1
 drf-yasg==1.17.1
