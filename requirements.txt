@@ -8,7 +8,7 @@ djangorestframework-jwt==1.11.0
 django-cors-headers==3.2.1
 drf-yasg==1.17.1
 # job queues and job scheduling
-celery==4.4.2
+celery==5.2.2
 flower==0.9.4
 
 # utils
