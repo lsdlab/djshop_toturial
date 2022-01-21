@@ -23,7 +23,7 @@ BeautifulSoup4==4.8.2
 django-extensions==2.2.9
 werkzeug==1.0.1
 better-exceptions==0.2.2
-ipython==7.13.0
+ipython==7.16.3
 
 # production
 gunicorn
