@@ -16,7 +16,7 @@ requests==2.23.0
 shortuuid==1.0.1
 timeago==1.0.13
 xpinyin==0.5.6
-mistune==0.8.4
+mistune==2.0.3
 BeautifulSoup4==4.8.2
 
 # development only
