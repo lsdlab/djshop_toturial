@@ -9,7 +9,7 @@ django-cors-headers==3.2.1
 drf-yasg==1.17.1
 # job queues and job scheduling
 celery==4.4.2
-flower==0.9.4
+flower==1.2.0
 
 # utils
 requests==2.23.0
